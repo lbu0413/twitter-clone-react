@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Spit from "../components/Spit";
 import { dbService } from "../fbase";
 
 const Home = ({ userObj }) => {
@@ -53,9 +54,11 @@ const Home = ({ userObj }) => {
 			</form>
 			<div>
 				{spits.map((spit) => (
-					<div key={spit.id}>
-						<h4>{spit.text}</h4>
-					</div>
+					<Spit
+						key={spit.id}
+						spitObj={spit}
+						isOwner={spit.creatorId === userObj.uid}
+					/>
 				))}
 			</div>
 		</div>
