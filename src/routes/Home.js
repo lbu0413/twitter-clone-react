@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { dbService } from "../fbase";
 
-const Home = () => {
+const Home = ({ userObj }) => {
 	const [spit, setSpit] = useState("");
 	const [spits, setSpits] = useState([]);
 	const getSpits = async () => {
@@ -16,14 +16,21 @@ const Home = () => {
 	};
 
 	useEffect(() => {
-		getSpits();
+		dbService.collection("spits").onSnapshot((snapshot) => {
+			const spitArray = snapshot.docs.map((doc) => ({
+				id: doc.id,
+				...doc.data(),
+			}));
+			setSpits(spitArray);
+		});
 	}, []);
 
 	const onSubmit = async (e) => {
 		e.preventDefault();
 		await dbService.collection("spits").add({
-			spit,
+			text: spit,
 			createdAt: Date.now(),
+			creatorId: userObj.uid,
 		});
 		setSpit("");
 	};
@@ -32,7 +39,6 @@ const Home = () => {
 		const { value } = e.target;
 		setSpit(value);
 	};
-	console.log(spits);
 	return (
 		<div>
 			<form onSubmit={onSubmit}>
@@ -48,7 +54,7 @@ const Home = () => {
 			<div>
 				{spits.map((spit) => (
 					<div key={spit.id}>
-						<h4>{spit.spit}</h4>
+						<h4>{spit.text}</h4>
 					</div>
 				))}
 			</div>
