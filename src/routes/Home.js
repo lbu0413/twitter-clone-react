@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 import Spit from "../components/Spit";
-import { dbService } from "../fbase";
+import { dbService, storageService } from "../fbase";
 
 const Home = ({ userObj }) => {
 	const [spit, setSpit] = useState("");
@@ -29,12 +30,23 @@ const Home = ({ userObj }) => {
 
 	const onSubmit = async (e) => {
 		e.preventDefault();
-		await dbService.collection("spits").add({
+		let attachmentURL = "";
+		if (attachment !== "") {
+			const attachmentRef = storageService
+				.ref()
+				.child(`${userObj.uid}/${uuidv4()}`);
+			const response = await attachmentRef.putString(attachment, "data_url");
+			attachmentURL = await response.ref.getDownloadURL();
+		}
+		const spitObj = {
 			text: spit,
 			createdAt: Date.now(),
 			creatorId: userObj.uid,
-		});
+			attachmentURL,
+		};
+		await dbService.collection("spits").add(spitObj);
 		setSpit("");
+		setAttachment("");
 	};
 
 	const onChange = (e) => {

@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { dbService } from "../fbase";
+import { dbService, storageService } from "../fbase";
 
 const Spit = ({ spitObj, isOwner }) => {
 	const [editing, setEditing] = useState(false);
 	const [newSpit, setNewSpit] = useState(spitObj.text);
-	const onDeleteClick = () => {
+	const onDeleteClick = async () => {
 		const ok = window.confirm("Are you sure?");
 		if (ok) {
-			dbService.doc(`spits/${spitObj.id}`).delete();
+			await dbService.doc(`spits/${spitObj.id}`).delete();
+			await storageService.refFromURL(spitObj.attachmentURL).delete();
 		}
 	};
 	const toggleEditing = () => setEditing((prev) => !prev);
@@ -41,6 +42,14 @@ const Spit = ({ spitObj, isOwner }) => {
 			) : (
 				<>
 					<h4>{spitObj.text}</h4>
+					{spitObj.attachmentURL && (
+						<img
+							src={spitObj.attachmentURL}
+							width="80px"
+							height="100px"
+							alt="attachment"
+						/>
+					)}
 					{isOwner && (
 						<>
 							<button onClick={onDeleteClick}>Delete Spit</button>
