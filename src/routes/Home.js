@@ -6,7 +6,7 @@ import { dbService, storageService } from "../fbase";
 const Home = ({ userObj }) => {
 	const [spit, setSpit] = useState("");
 	const [spits, setSpits] = useState([]);
-	const [attachment, setAttachment] = useState();
+	const [attachment, setAttachment] = useState("");
 	const getSpits = async () => {
 		const dbSpits = await dbService.collection("spits").get();
 		dbSpits.forEach((document) => {
