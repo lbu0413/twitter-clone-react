@@ -29,9 +29,9 @@ const Home = ({ userObj }) => {
 	}, []);
 
 	return (
-		<div>
+		<div className="container">
 			<SpitFactory userObj={userObj} />
-			<div>
+			<div style={{ marginTop: 30 }}>
 				{spits.map((spit) => (
 					<Spit
 						key={spit.id}

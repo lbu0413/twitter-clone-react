@@ -48,14 +48,23 @@ const Spit = ({ spitObj, isOwner }) => {
 			) : (
 				<>
 					<h4>{spitObj.text}</h4>
-					{spitObj.attachmentURL && <img alt="" src={spitObj.attachmentURL} />}
+					{spitObj.attachmentURL && (
+						<img
+							style={{ width: "50px", height: "50px" }}
+							alt=""
+							src={spitObj.attachmentURL}
+						/>
+					)}
 					{isOwner && (
 						<div className="spit__actions">
 							<span onClick={onDeleteClick}>
-								<FontAwesomeIcon icon={faTrash} />
+								<FontAwesomeIcon icon={faTrash} style={{ cursor: "pointer" }} />
 							</span>
 							<span onClick={toggleEditing}>
-								<FontAwesomeIcon icon={faPencilAlt} />
+								<FontAwesomeIcon
+									icon={faPencilAlt}
+									style={{ cursor: "pointer" }}
+								/>
 							</span>
 						</div>
 					)}
