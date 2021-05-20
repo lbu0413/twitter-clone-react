@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { dbService, storageService } from "../fbase";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 
 const Spit = ({ spitObj, isOwner }) => {
 	const [editing, setEditing] = useState(false);
@@ -24,37 +26,38 @@ const Spit = ({ spitObj, isOwner }) => {
 		setEditing(false);
 	};
 	return (
-		<div key={spitObj.id}>
+		<div className="spit" key={spitObj.id}>
 			{editing ? (
 				<>
-					<form onSubmit={onSubmit}>
+					<form onSubmit={onSubmit} className="container spitEdit">
 						<input
 							value={newSpit}
 							type="text"
 							required
+							autoFocus
 							placeholder="Edit your spit"
 							onChange={onChange}
+							className="formInput"
 						/>
-						<input type="submit" value="Update Spit" />
+						<input type="submit" value="Update Spit" className="formBtn" />
 					</form>
-					<button onClick={toggleEditing}>Cancel</button>
+					<span onClick={toggleEditing} className="formBtn cancelBtn">
+						Cancel
+					</span>
 				</>
 			) : (
 				<>
 					<h4>{spitObj.text}</h4>
-					{spitObj.attachmentURL && (
-						<img
-							src={spitObj.attachmentURL}
-							width="80px"
-							height="100px"
-							alt="attachment"
-						/>
-					)}
+					{spitObj.attachmentURL && <img alt="" src={spitObj.attachmentURL} />}
 					{isOwner && (
-						<>
-							<button onClick={onDeleteClick}>Delete Spit</button>
-							<button onClick={toggleEditing}>Edit Spit</button>
-						</>
+						<div className="spit__actions">
+							<span onClick={onDeleteClick}>
+								<FontAwesomeIcon icon={faTrash} />
+							</span>
+							<span onClick={toggleEditing}>
+								<FontAwesomeIcon icon={faPencilAlt} />
+							</span>
+						</div>
 					)}
 				</>
 			)}
