@@ -21,7 +21,7 @@ const AppRouter = ({ isLoggedIn, userObj, refreshUser }) => {
 							justifyContent: "center",
 						}}>
 						<Route exact path="/">
-							<Home userObj={userObj} />
+							<Home refreshUser={refreshUser} userObj={userObj} />
 						</Route>
 						<Route exact path="/profile">
 							<Profile refreshUser={refreshUser} userObj={userObj} />
